@@ -1,0 +1,30 @@
+--- Test: expand_percentage=0, align=True ---
+Accuracy: 0.6483 | F1: 0.4001 | Avg Confidence: 83.85
+
+Elapsed Time: 0h 0m 45s
+
+--- Test: expand_percentage=0, align=False ---
+Accuracy: 0.6596 | F1: 0.4121 | Avg Confidence: 83.96
+
+Elapsed Time: 0h 0m 44s
+
+--- Test: expand_percentage=10, align=True ---
+Accuracy: 0.6483 | F1: 0.4005 | Avg Confidence: 83.92
+
+Elapsed Time: 0h 0m 45s
+
+--- Test: expand_percentage=10, align=False ---
+Accuracy: 0.6525 | F1: 0.4024 | Avg Confidence: 83.35
+
+Elapsed Time: 0h 0m 44s
+
+--- Test: expand_percentage=20, align=True ---
+Accuracy: 0.6483 | F1: 0.4005 | Avg Confidence: 83.98
+
+Elapsed Time: 0h 0m 46s
+
+--- Test: expand_percentage=20, align=False ---
+Accuracy: 0.6497 | F1: 0.4009 | Avg Confidence: 83.86
+
+Elapsed Time: 0h 0m 44s
+

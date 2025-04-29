@@ -1,0 +1,19 @@
+Accuracy: 0.622437971952535
+F1 Score (Macro): 0.4599207926855177
+Classification Report:
+              precision    recall  f1-score   support
+
+       angry       0.27      0.45      0.34       135
+     disgust       0.00      0.00      0.00       177
+        fear       0.18      0.04      0.07        75
+       happy       0.86      1.00      0.92       207
+         sad       0.37      0.76      0.50        84
+    surprise       0.90      0.97      0.94       249
+
+    accuracy                           0.62       927
+   macro avg       0.43      0.54      0.46       927
+weighted avg       0.52      0.62      0.56       927
+
+Average Confidence: 0.6296
+
+Il y a 350 exemples mal classés.
