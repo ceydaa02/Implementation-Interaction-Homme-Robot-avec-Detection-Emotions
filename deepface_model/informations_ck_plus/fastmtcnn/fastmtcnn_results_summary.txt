@@ -1,30 +1,30 @@
 --- Test: expand_percentage=0, align=True ---
-Accuracy: 0.6073 | F1: 0.3682 | Avg Confidence: 78.86
+Accuracy: 0.5771 | F1: 0.4758 | Avg Confidence: 70.93
 
-Elapsed Time: 0h 0m 21s
+Elapsed Time: 0h 0m 43s
 
 --- Test: expand_percentage=0, align=False ---
-Accuracy: 0.5367 | F1: 0.3443 | Avg Confidence: 82.25
+Accuracy: 0.5133 | F1: 0.4275 | Avg Confidence: 76.72
 
-Elapsed Time: 0h 0m 16s
+Elapsed Time: 0h 0m 28s
 
 --- Test: expand_percentage=10, align=True ---
-Accuracy: 0.5720 | F1: 0.3511 | Avg Confidence: 78.93
+Accuracy: 0.5415 | F1: 0.4470 | Avg Confidence: 73.13
 
-Elapsed Time: 0h 0m 20s
+Elapsed Time: 0h 0m 37s
 
 --- Test: expand_percentage=10, align=False ---
-Accuracy: 0.6384 | F1: 0.3965 | Avg Confidence: 82.21
+Accuracy: 0.5933 | F1: 0.4966 | Avg Confidence: 74.18
 
-Elapsed Time: 0h 0m 16s
+Elapsed Time: 0h 0m 29s
 
 --- Test: expand_percentage=20, align=True ---
-Accuracy: 0.4887 | F1: 0.2951 | Avg Confidence: 76.84
+Accuracy: 0.4844 | F1: 0.3938 | Avg Confidence: 72.59
 
-Elapsed Time: 0h 0m 20s
+Elapsed Time: 0h 0m 43s
 
 --- Test: expand_percentage=20, align=False ---
-Accuracy: 0.6455 | F1: 0.3979 | Avg Confidence: 83.43
+Accuracy: 0.5987 | F1: 0.4989 | Avg Confidence: 75.12
 
-Elapsed Time: 0h 0m 16s
+Elapsed Time: 0h 0m 30s
 
