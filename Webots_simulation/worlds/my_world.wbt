@@ -1,0 +1,128 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
+EXTERNPROTO "../protos/Nao.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/humans/skin_animated_humans/protos/CharacterSkin.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation 0.31520558126852044 -0.15979803975468904 -0.9354731572994133 4.027267850060625
+  position 13.119654119542423 -11.334920584126458 14.835126974091775
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+  luminosity 0.8
+  castShadows FALSE
+}
+RectangleArena {
+  translation -1.64 0 0
+  rotation 0 0 1 4.6928e-06
+  floorSize 100 100
+  floorAppearance Parquetry {
+    type "light strip"
+  }
+  wallHeight 10
+}
+DEF SOPHIA Robot {
+  translation 3.31694 4.5657 -1.70245e-05
+  rotation 0 0 1 -1.047195307179586
+  children [
+    CharacterSkin {
+      name "Sophia"
+      model "Sophia"
+    }
+  ]
+  name "sophia"
+  controller "human_pose"
+  controllerArgs [
+    "-d"
+    "Sophia"
+    "-f"
+    "../../motions/jump.bvh"
+    "-s"
+    "100"
+  ]
+  supervisor TRUE
+}
+DEF SANDRA Robot {
+  translation 6.38133 -3.15034 -5.12216e-05
+  rotation 0 0 1 2.8798
+  children [
+    CharacterSkin {
+      name "Sandra"
+    }
+  ]
+  name "sandra"
+  controller "human_pose"
+  controllerArgs [
+    "-d"
+    "Sandra"
+    "-f"
+  ]
+  supervisor TRUE
+}
+DEF ROBERT Robot {
+  translation -4.1111 -2.6055 0
+  rotation 0 0 1 1.30899
+  children [
+    CharacterSkin {
+      name "Robert"
+      model "Robert"
+    }
+  ]
+  name "robert"
+  controller "human_pose"
+  controllerArgs [
+    "-d"
+    "Robert"
+    "-f"
+    "../../motions/walk.bvh"
+    "-l"
+  ]
+  supervisor TRUE
+}
+Wall {
+  translation 0.91 2.675 0
+  name "wall(6)"
+  size 0.3 5 3
+}
+Wall {
+  translation -5.45 0.31 0
+  size 0.3 10.3 3
+}
+Wall {
+  translation 1.57 5.3 0
+  rotation 0 0 1 1.5708
+  name "wall(2)"
+  size 0.3 13.7 3
+}
+Wall {
+  translation 1.54002 -4.69 0
+  rotation 0 0 1 1.5708
+  name "wall(4)"
+  size 0.3 13.7 3
+}
+Wall {
+  translation 8.55 0.31 0
+  name "wall(1)"
+  size 0.3 10.3 3
+}
+Nao {
+  translation -2.60237 3.49975 0.325655
+  rotation -0.01368560254569638 -0.004040040751499036 0.9998981859937979 -1.6554653071795862
+  controller "nao_controller"
+  headSlot [
+    Lidar {
+      fieldOfView 1.0472
+      verticalFieldOfView 0.1
+      numberOfLayers 2
+      maxRange 15
+    }
+  ]
+}
