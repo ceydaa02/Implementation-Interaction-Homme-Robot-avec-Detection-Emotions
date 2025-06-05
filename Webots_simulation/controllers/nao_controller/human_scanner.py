@@ -6,13 +6,11 @@ import math
 
 def set_robot_default_pose(robot, head_yaw, l_shoulder_pitch, r_shoulder_pitch, TIME_STEP):
     
-    print("[ACTION] Kafa sıfırlanıyor...")
     head_yaw.setPosition(0.0)
     for _ in range(20):
         if robot.step(TIME_STEP) == -1:
             break
 
-    print("[ACTION] Kollar dengeli pozisyona getiriliyor...")
     l_shoulder_pitch.setPosition(1.5)
     r_shoulder_pitch.setPosition(1.5)
     for _ in range(20):
@@ -21,7 +19,6 @@ def set_robot_default_pose(robot, head_yaw, l_shoulder_pitch, r_shoulder_pitch, 
 
 
 def find_closest_human(robot, TIME_STEP, MOTION_PATH):
-    # Cihazlar
     camera = robot.getDevice("CameraTop")
     camera.enable(4 * TIME_STEP)
     camera_fov_rad = camera.getFov()
@@ -37,15 +34,13 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
     head_yaw.setPosition(float('inf'))
     head_yaw.setVelocity(1.0)
 
-    # Kollar
     l_shoulder_pitch = robot.getDevice("LShoulderPitch")
     r_shoulder_pitch = robot.getDevice("RShoulderPitch")
 
-    # Motionlar
     walk_motion = Motion(MOTION_PATH + "Forwards50.motion")
     model = YOLO("yolov8n.pt")
 
-    print("[INFO] Kafa taraması ile insan aranıyor...")
+    print("[INFO] Recherche de l’humain par balayage de la tête...")
 
     detected_human = None
     found = False
@@ -97,8 +92,8 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
                         if distance == float('inf') or distance > 5:
                             continue
 
-                        print("İnsan kamerada " + ("SAĞDA" if relative_angle < 0 else "SOLDA"))
-                        print(f"[DETECTED] Kafa: {math.degrees(angle_rad):.1f}° | Görsel ofset: {math.degrees(relative_angle):.1f}° | Mesafe: {distance:.2f} m")
+                        print("Humain détecté sur la " + ("DROITE" if relative_angle < 0 else "GAUCHE"))
+                        print(f"[DÉTECTÉ] Tête: {math.degrees(angle_rad):.1f}° | Décalage visuel: {math.degrees(relative_angle):.1f}° | Distance: {distance:.2f} m")
 
                         detected_human = {
                             "distance": distance,
@@ -109,15 +104,15 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
                         break
 
     if detected_human is None:
-        print("[INFO] İnsan bulunamadı.")
+        print("[INFO] Aucun humain détecté.")
         return None
     
     set_robot_default_pose(robot, head_yaw, l_shoulder_pitch, r_shoulder_pitch, TIME_STEP)
 
-    # 🔁 Gövde dönüyor
+
     turn_angle_deg = math.degrees(detected_human["turn_angle_rad"])
-    print(f"[ACTION] Gövde {turn_angle_deg:.1f}° döndürülüyor...")
-    if abs(turn_angle_deg) >= 30:  # Daha hassas eşik
+    print(f"[ACTION] Rotation du torse de {turn_angle_deg:.1f}°...")
+    if abs(turn_angle_deg) >= 30: 
         turn_steps = round(abs(turn_angle_deg) / 40)
         for _ in range(turn_steps):
             turn_motion = Motion(
@@ -131,28 +126,26 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
                 if robot.step(TIME_STEP) == -1:
                     break
     else:
-        print("[ACTION] Gövde zaten hedefe dönük.")
+        print(f"[ACTION] Rotation du torse de {turn_angle_deg:.1f}°...")
 
-    print("[ACTION] Yürümeye başlanıyor...")
-    desired_distance = 2.5 # 1.0
+    desired_distance = 2.5 
     initial_distance = detected_human["distance"]
     approach_distance = max(0.0, initial_distance - desired_distance)
-    print(f"[ACTION] Hedefe toplam {approach_distance:.2f} m ilerleniyor...")
+    print(f"[ACTION] Avancer d'un total de {approach_distance:.2f} m vers la cible...")
 
     step_distance = 0.5  #0.765
     steps_needed = max(1, round(approach_distance / step_distance))
 
     for step in range(steps_needed):
-        print(f"[STEP] {step+1}/{steps_needed} adım ilerleniyor.")
+        print(f"[ÉTAPE] Avancement de l’étape {step+1}/{steps_needed}...")
 
-        # Motion nesnesini her seferinde yeniden oluştur
         walk_motion = Motion(MOTION_PATH + "Forwards50.motion")
 
         walk_motion.play()
         for _ in range(int(walk_motion.getDuration() // TIME_STEP)):
             if robot.step(TIME_STEP) == -1:
                 break
-    print(f"[INFO] {desired_distance} m kala duruldu.")
+    print(f"[INFO] Arrêt à {desired_distance} m de la cible.")
     return detected_human
 
 
@@ -170,7 +163,8 @@ def go_to_face_human(robot, detected_human, TIME_STEP, MOTION_PATH):
 
     side_motion_name = "SideStepLeft" if angle > 0 else "SideStepRight"
 
-    print(f"[PLAN] {forward_steps} adım ileri, {side_steps} adım {'sola' if angle > 0 else 'sağa'} gidilecek.")
+    print(f"[PLAN] Avancer de {forward_steps} pas et se déplacer de {side_steps} pas vers la {'gauche' if angle > 0 else 'droite'}.")
+
 
     for _ in range(side_steps):
         side_motion = Motion(MOTION_PATH + f"{side_motion_name}.motion")
@@ -233,7 +227,7 @@ def find_gap(robot, TIME_STEP, MOTION_PATH):
             break
 
     if gap_start is None or gap_end is None:
-        print("[WARN] Geçit başlangıç/bitişi tespit edilemedi.")
+        print("[AVERTISSEMENT] Impossible de détecter le début ou la fin du passage.")
         return
 
     # Geçit ortası
@@ -242,7 +236,7 @@ def find_gap(robot, TIME_STEP, MOTION_PATH):
     # Açı hesapla
     angle_rad = ((gap_index / resolution) - 0.5) * lidar_fov
     angle_deg = math.degrees(angle_rad)
-    print(f"[GAP] Geçit ortası tespit edildi! Açı: {angle_deg:.2f}°")
+    print(f"[PASSAGE] Centre du passage détecté ! Angle : {angle_deg:.2f}°")
 
     # Dönüş
     if abs(angle_deg) > 20:
@@ -252,9 +246,10 @@ def find_gap(robot, TIME_STEP, MOTION_PATH):
         for _ in range(int(turn_motion.getDuration() / TIME_STEP)):
             if robot.step(TIME_STEP) == -1:
                 return
-        print(f"[ACTION] {angle_deg:.1f}° açısına dönüldü.")
+        print(f"[ACTION] Tourné vers l’angle de {angle_deg:.1f}°.")
+
     else:
-        print("[INFO] Zaten geçit yönüne hizalı.")
+        print("[INFO] Déjà aligné vers le passage.")
 
 
 

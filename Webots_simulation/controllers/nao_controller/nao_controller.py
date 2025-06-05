@@ -11,7 +11,6 @@ robot = Robot()
 
 detected_human = find_closest_human(robot, TIME_STEP, MOTION_PATH)
 dominant_emotion = analyze_emotion(duration=2, camera_index=0)
-print(f"[INFO] Dominant Emotion: {dominant_emotion}")
 
 dominant_emotion = "sad"
 if dominant_emotion == "sad":
@@ -21,7 +20,6 @@ if dominant_emotion == "sad":
 motion = Motion(MOTION_PATH + "/TurnLeft60.motion")
 motion.play()
 
-# Hareketin süresi kadar bekle
 for _ in range(int(motion.getDuration() / TIME_STEP)):
     if robot.step(TIME_STEP) == -1:
         break
@@ -30,7 +28,6 @@ for _ in range(int(motion.getDuration() / TIME_STEP)):
 detected_human = find_closest_human(robot, TIME_STEP, MOTION_PATH)
 if detected_human is not None:
     dominant_emotion = analyze_emotion(duration=2, camera_index=0)
-    print(f"[INFO] Dominant Emotion: {dominant_emotion}")
 else:
     find_gap(robot, TIME_STEP, MOTION_PATH)
     while (detected_human := find_closest_human(robot, TIME_STEP, MOTION_PATH)) is None:
@@ -44,7 +41,6 @@ else:
 
 
 dominant_emotion = analyze_emotion(duration=2, camera_index=0)
-print(f"[INFO] Dominant Emotion: {dominant_emotion}")
 
 dominant_emotion = "fear"
 if dominant_emotion == "fear":
@@ -54,7 +50,6 @@ if dominant_emotion == "fear":
 detected_human = find_closest_human(robot, TIME_STEP, MOTION_PATH)
 if detected_human is not None:
     dominant_emotion = analyze_emotion(duration=2, camera_index=0)
-    print(f"[INFO] Dominant Emotion: {dominant_emotion}")
     dominant_emotion = "happy"
     if dominant_emotion == "happy":
         motion = Motion(MOTION_PATH + "/Handwave.motion")
