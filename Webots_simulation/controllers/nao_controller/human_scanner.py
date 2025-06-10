@@ -111,8 +111,8 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
 
 
     turn_angle_deg = math.degrees(detected_human["turn_angle_rad"])
-    print(f"[ACTION] Rotation du torse de {turn_angle_deg:.1f}°...")
     if abs(turn_angle_deg) >= 30: 
+        print(f"[ACTION] Rotation du torse de {turn_angle_deg:.1f}°...")
         turn_steps = round(abs(turn_angle_deg) / 40)
         for _ in range(turn_steps):
             turn_motion = Motion(
@@ -126,7 +126,7 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
                 if robot.step(TIME_STEP) == -1:
                     break
     else:
-        print(f"[ACTION] Rotation du torse de {turn_angle_deg:.1f}°...")
+        print(f"[ACTION] Déjà aligné à {turn_angle_deg:.1f}°, pas de rotation nécessaire.")
 
     desired_distance = 2.5 
     initial_distance = detected_human["distance"]
@@ -151,7 +151,7 @@ def find_closest_human(robot, TIME_STEP, MOTION_PATH):
 
 
 
-def go_to_face_human(robot, detected_human, TIME_STEP, MOTION_PATH):
+def show_sad_reaction(robot, detected_human, TIME_STEP, MOTION_PATH):
     distance = detected_human["distance"]
     angle = detected_human["relative_angle_rad"]
 
@@ -194,6 +194,20 @@ def go_to_face_human(robot, detected_human, TIME_STEP, MOTION_PATH):
             return
 
 
+def show_happy_reaction(robot, TIME_STEP, MOTION_PATH):
+    motion = Motion(MOTION_PATH + "/Handwave.motion")
+    motion.play()
+
+    for _ in range(int(motion.getDuration() / TIME_STEP)+5):
+        if robot.step(TIME_STEP) == -1:
+            break
+
+    motion = Motion(MOTION_PATH + "/WipeForeHead.motion")
+    motion.play()
+
+    for _ in range(int(motion.getDuration() / TIME_STEP)+5):
+        if robot.step(TIME_STEP) == -1:
+            break
 
 
 
@@ -209,7 +223,7 @@ def find_gap(robot, TIME_STEP, MOTION_PATH):
 
     gap_start = None
     gap_end = None
-    min_jump = 3.0  # duvardan boşluğa sıçrama
+    min_jump = 3.0 
 
     for i in range(10, resolution - 10):
         left = lidar_values[i - 5]
@@ -230,15 +244,12 @@ def find_gap(robot, TIME_STEP, MOTION_PATH):
         print("[AVERTISSEMENT] Impossible de détecter le début ou la fin du passage.")
         return
 
-    # Geçit ortası
     gap_index = (gap_start + gap_end) // 2
 
-    # Açı hesapla
     angle_rad = ((gap_index / resolution) - 0.5) * lidar_fov
     angle_deg = math.degrees(angle_rad)
     print(f"[PASSAGE] Centre du passage détecté ! Angle : {angle_deg:.2f}°")
 
-    # Dönüş
     if abs(angle_deg) > 20:
         turn_motion_file = "TurnLeft40.motion" if angle_deg > 0 else "TurnRight40.motion"
         turn_motion = Motion(f"{MOTION_PATH}/{turn_motion_file}")
@@ -253,7 +264,7 @@ def find_gap(robot, TIME_STEP, MOTION_PATH):
 
 
 
-def go_away_face_human(robot, TIME_STEP, MOTION_PATH):
+def show_fear_reaction(robot, TIME_STEP, MOTION_PATH):
     turn_motion = Motion(MOTION_PATH + "TurnLeft60.motion")
     turn_motion.play()
     for _ in range(int(turn_motion.getDuration() // TIME_STEP)):
